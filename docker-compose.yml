@@ -1,0 +1,74 @@
+version: "2"
+services:
+       user-service:
+           container_name: user-service
+           image: user-service
+           restart: always
+           build: user-service/
+           ports:
+             - "3003:3003"
+           links:
+             - mongodb
+       email-service:
+           container_name: email-service
+           image: email-service
+           restart: always
+           build: email-service/
+           ports:
+             - "8084:8084"
+       appointment-service:
+           container_name: appointment-service
+           image: appointment-service
+           restart: always
+           build: appointment-service/
+           ports:
+             - "8081:8081"
+           links:
+             - mongodb
+      api-gateway:
+           container_name: api-gateway
+           image: api-gateway
+           restart: always
+           build: api-gateway/
+           hostname: localhost
+           network_mode: host
+           ports:
+             - "8080:8080"
+       payment-service:
+           container_name: payment-service
+           image: payment-service
+           restart: always
+           build: payment-service/
+           hostname: localhost
+           network_mode: host
+           ports:
+             - "8282:8282"
+        chat-service:
+           container_name: chat-service
+           image: chat-service
+           restart: always
+           build: chat-service/
+           hostname: localhost
+           network_mode: host
+           ports:
+             - "5000:5000"
+
+       mongodb:
+           container_name: mongodb
+           image: mongo
+           restart: always
+           volumes:
+             - ./data:/data/db
+           ports:
+             - 27017:27017
+       mysql:
+           container_name: mysql
+           image: mysql
+           restart: always
+           environment: 
+            MYSQL_ROOT_PASSWORD: root123
+            MYSQL_USERNAME: root
+            MYSQL_DATABASE: Authentication_Service
+#            MYSQL_ROOT_HOST: "localhost"
+           ports:
+             - 3306:3306
